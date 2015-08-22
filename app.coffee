@@ -14,6 +14,7 @@ PhotoFileUtils = require("./lib/photo_file_utils")
 StubCameraControl = require("./lib/stub_camera_control")
 CameraControl = require("./lib/camera_control")
 ImageCompositor = require("./lib/image_compositor")
+Mailer = require("./lib/mailer")
 
 exp = express()
 web = http.createServer(exp)
@@ -68,11 +69,12 @@ io.sockets.on "connection", (websocket) ->
 
   websocket.on "all_images", ->
 
-  websocket.on "composite", ->
+  websocket.on "composite", (email) ->
     compositer = new ImageCompositor(State.image_src_list).init()
     compositer.emit "composite"
     compositer.on "composited", (output_file_path) ->
       console.log "Finished compositing image. Output image is at ", output_file_path
+      Mailer.sendPhotoMessage(email, output_file_path) if email?
       State.image_src_list = []
 
       # Control this with PRINTER=true or PRINTER=false
