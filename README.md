@@ -43,9 +43,9 @@ The server is responsible for controlling the camera, and serving the Web interf
 
 ##### Install node & npm
 
-I've currently tested this app against `node 0.10`.
-
     $ brew install node
+
+Note that `shmile` officially supports Node `v0.12`, `4.2`, and `5.0`.
 
 ##### Install imagemagick
 
