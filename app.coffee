@@ -14,6 +14,7 @@ PhotoFileUtils = require("./lib/photo_file_utils")
 StubCameraControl = require("./lib/stub_camera_control")
 CameraControl = require("./lib/camera_control")
 ImageCompositor = require("./lib/image_compositor")
+DoubleImageCompositor = require("./lib/double_image_compositor")
 
 exp = express()
 web = http.createServer(exp)
@@ -69,7 +70,8 @@ io.sockets.on "connection", (websocket) ->
   websocket.on "all_images", ->
 
   websocket.on "composite", ->
-    compositer = new ImageCompositor(State.image_src_list).init()
+    # compositer = new ImageCompositor(State.image_src_list).init()
+    compositer = new DoubleImageCompositor(State.image_src_list).init()
     compositer.emit "composite"
     compositer.on "composited", (output_file_path) ->
       console.log "Finished compositing image. Output image is at ", output_file_path
