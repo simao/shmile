@@ -1,28 +1,38 @@
 im = require("imagemagick")
-exec = require("child_process").exec
+# exec = require("child_process").exec
 fs = require("fs")
 EventEmitter = require("events").EventEmitter
 
 IMAGE_HEIGHT = 583
 IMAGE_WIDTH = 875
-TOTAL_HEIGHT = 2550 
+TOTAL_HEIGHT = 2550
 TOTAL_WIDTH = 1750 / 2.0
 
 # Composites an array of four images into the final grid-based image asset.
 class DoubleImageCompositor
+
+
   defaults:
-    overlay_src: "public/images/overlay_david.png"
+    # overlay_src: "public/images/overlay_david.png"
     tmp_dir: "public/temp"
     output_dir: "public/photos/generated"
     thumb_dir: "public/photos/generated/thumbs"
 
-  constructor: (@img_src_list=[], @opts=null, @cb) ->
-    console.log("img_src_list is: #{@img_src_list}")
+  constructor: (@opts=null) ->
+    # console.log("img_src_list is: #{@img_src_list}")
     @opts = @defaults if @opts is null
+    @img_src_list = []
+
+  push: (image) ->
+    @img_src_list.push image
+
+  clearImages: ->
+    console.log "clearImages"
+    @img_src_list.length = 0
 
   init: ->
     emitter = new EventEmitter()
-    emitter.on "composite", =>
+    emitter.on "composite", (overlay_src) =>
       convertArgs = [ "-size", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, "canvas:white" ]
       utcSeconds = (new Date()).valueOf()
       IMAGE_GEOMETRY = "#{IMAGE_WIDTH}x#{IMAGE_HEIGHT}"
@@ -36,7 +46,9 @@ class DoubleImageCompositor
         convertArgs.push IMAGE_WIDTH + "x" + IMAGE_HEIGHT + "+0+" + i * IMAGE_HEIGHT # TODO: use constants
         convertArgs.push "-composite"
 
-      convertArgs.push @opts.overlay_src
+      # convertArgs.push @opts.overlay_src
+      # FIXME: remove the need for hardcoded public
+      convertArgs.push "public" + overlay_src
       convertArgs.push "-geometry"
       convertArgs.push TOTAL_WIDTH + "x" + TOTAL_HEIGHT + "+0+0"
       convertArgs.push "-composite"

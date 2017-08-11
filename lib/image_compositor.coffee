@@ -11,19 +11,32 @@ TOTAL_WIDTH = IMAGE_WIDTH * 2 + IMAGE_PADDING * 3
 
 # Composites an array of four images into the final grid-based image asset.
 class ImageCompositor
+
+
   defaults:
-    overlay_src: "public/images/overlay.png"
+    # overlay_src: "public/images/overlay.png"
     tmp_dir: "public/temp"
     output_dir: "public/photos/generated"
     thumb_dir: "public/photos/generated/thumbs"
 
-  constructor: (@img_src_list=[], @opts=null, @cb) ->
-    console.log("img_src_list is: #{@img_src_list}")
+
+  constructor: (@opts=null) ->
+    # console.log("img_src_list is: #{@img_src_list}")
     @opts = @defaults if @opts is null
+    @img_src_list = []
+
+  push: (image) ->
+    console.log "push image #{image}"
+    @img_src_list.push image
+    console.log "img_src_list  = #{@img_src_list}"
+
+  clearImages: ->
+    console.log "clearImages"
+    @img_src_list.length = 0
 
   init: ->
     emitter = new EventEmitter()
-    emitter.on "composite", =>
+    emitter.on "composite", (overlay_src) =>
       convertArgs = [ "-size", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, "canvas:white" ]
       utcSeconds = (new Date()).valueOf()
       IMAGE_GEOMETRY = "#{IMAGE_WIDTH}x#{IMAGE_HEIGHT}"
@@ -47,11 +60,12 @@ class ImageCompositor
         (err, stdout, stderr) ->
           throw err  if err
           emitter.emit "laid_out", OUTPUT_PATH
+          # clearImages();
           doCompositing()
       )
 
       doCompositing = =>
-        compositeArgs = [ "-gravity", "center", @opts.overlay_src, OUTPUT_PATH, "-geometry", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, FINAL_OUTPUT_PATH ]
+        compositeArgs = [ "-gravity", "center", "public" + overlay_src, OUTPUT_PATH, "-geometry", TOTAL_WIDTH + "x" + TOTAL_HEIGHT, FINAL_OUTPUT_PATH ]
         console.log("executing: composite " + compositeArgs.join(" "))
         exec "composite " + compositeArgs.join(" "), (error, stderr, stdout) ->
           throw error  if error
