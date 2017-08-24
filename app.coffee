@@ -17,10 +17,12 @@ Template = require("./lib/template")
 
 ImageCompositor = require("./lib/image_compositor")
 DoubleImageCompositor = require("./lib/double_image_compositor")
+Landscape3x8Compositor = require("./lib/landscape_3x8_compositor")
 
 exp = express()
 web = http.createServer(exp)
-template = new Template({overlayImage: "/images/img_photobooth.png", photoView: 'PortraitOneByFour', compositor: new DoubleImageCompositor()})
+template = new Template({overlayImage: "/images/horizontal.png", photoView: 'LandscapeOneByThree', compositor: new Landscape3x8Compositor()})
+# template = new Template({overlayImage: "/images/img_photobooth.png", photoView: 'PortraitOneByFour', compositor: new DoubleImageCompositor()})
 # template = new Template({overlayImage: "/images/overlay.png", photoView: 'LandscapeTwoByTwo', compositor: new ImageCompositor()})
 console.log("printer is: #{template.printerEnabled}")
 
