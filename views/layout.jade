@@ -5,6 +5,8 @@ html
       block title
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/shmile.css')
+    link(rel='stylesheet', href='/css/snackbar.css')
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
 
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='viewport', content="initial-scale=1.0, user-scalable=no")
@@ -18,9 +20,11 @@ html
     script(type='text/javascript', src='/components/underscore/underscore-min.js')
     script(type='text/javascript', src='/components/backbone/backbone.js')
 
+    // snack bar
+    script(type='text/javascript', src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+
     // Frontend app: shmile-ui
     script(type='text/javascript', src='/components/shmile-ui/build/js/shmile-ui.js')
 
   body.nicegradient
     block content
-

@@ -31,7 +31,8 @@
     "coffee-script": "~1.7.1",
     "dotenv": "~0.3.0",
     "raspicam": "~0.2.14",
-    "moment": "~2.18.1"
+    "moment": "~2.18.1",
+    "q": "~1.5.0"
   },
   "devDependencies": {
     "bower": "^1.6.8",
