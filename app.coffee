@@ -84,10 +84,19 @@ io.sockets.on "connection", (websocket) ->
   websocket.on "all_images", ->
 
   websocket.on "composite", ->
-    # compositor = new ImageCompositor(State.image_src_list).init()
-    # compositor = new DoubleImageCompositor(State.image_src_list).init()
-    # compositor = template.compositor
+    shouldPrint = false
+    if template.printerEnabled
+      console.log "The printer is enabled, showing message"
+      websocket.emit "printer_enabled"
+    else
+      console.log "The printer is NOT enabled, proceeding to 'review_composited'"
+      websocket.emit "review_composited"
+
+    websocket.on "print", ->
+      shouldPrint = true
+
     compositor.emit "composite", template.overlayImage
+
     compositor.on "composited", (output_file_path) ->
       console.log "Finished compositing image. Output image is at ", output_file_path
       # State.image_src_list = []
@@ -96,7 +105,7 @@ io.sockets.on "connection", (websocket) ->
 
       # Control this with PRINTER=true or PRINTER=false
       # if process.env.PRINTER_ENABLED is "true"
-      if template.printerEnabled
+      if template.printerEnabled && shouldPrint
         console.log "Printing image at ", output_file_path
         # exec "lpr -o #{process.env.PRINTER_IMAGE_ORIENTATION} -o media=\"#{process.env.PRINTER_MEDIA}\" #{output_file_path}"
         exec "lpr -o #{template.printer} #{output_file_path}"
