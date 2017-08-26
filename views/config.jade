@@ -1,0 +1,18 @@
+extends config_layout
+
+block title
+  = "Config"
+
+block content
+  h1
+    Shmile Config #{currentTemplate}
+
+  div.row
+    form(action='/config',method='post')
+      div.form-group
+        label(for='current_template') Template
+        select.form-control.custom-select(id='currentTemplate', name='currentTemplate')
+          each template in templates
+            option(selected=currentTemplate == template,value=template) #{template}
+
+      button.btn.btn-primary(type=sumit) Save

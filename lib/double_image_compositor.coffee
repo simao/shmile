@@ -10,8 +10,6 @@ TOTAL_WIDTH = 1750 / 2.0
 
 # Composites an array of four images into the final grid-based image asset.
 class DoubleImageCompositor
-
-
   defaults:
     # overlay_src: "public/images/overlay_david.png"
     tmp_dir: "public/temp"
